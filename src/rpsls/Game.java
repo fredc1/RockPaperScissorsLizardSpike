@@ -12,28 +12,38 @@ import java.util.Scanner;
  */
 public class Game {
 	/**
-	 * Factory Method.
+	 * Factory Method to Create a Game Instance.
 	 * 
 	 * @param numRounds indicate how may rounds constitute a game.
 	 * @param rules indicate the type of game being played.
 	 * @return an instance of the Game object.
 	 */
 	public static Game newGame(int numRounds, Rules rules) {
-		Scanner inputScanner = new Scanner(System.in);
+		Scanner aInputScanner = new Scanner(System.in);
 		Scoreboard aScoreboard = new Scoreboard(rules);
-		StdTalker aTalker = new StdTalker(inputScanner);
+		StdTalker aTalker = new StdTalker(aInputScanner);
 		Engine aEngine = new Engine(rules);
-		StdThrower aThrower = new StdThrower();
+		SmartThrower aThrower = new SmartThrower(rules);
+		History aHistory = new History(rules);
 		
-		return new Game(aScoreboard, aTalker, aThrower, aEngine, inputScanner, numRounds);
+		
+		return new Game(aScoreboard, aTalker, aThrower, aEngine, aInputScanner, aHistory,numRounds);
 		
 	}
-	private Game(Scoreboard scoreboard, Talker talker, Thrower thrower, Engine engine, Scanner scanner,int totalNumRounds) {
+	private Game(Scoreboard scoreboard, 
+				 Talker talker, 
+			     Thrower thrower, 
+			     Engine engine, 
+			     Scanner scanner, 
+			     History history,
+			     int totalNumRounds) {
+		
 		this.scoreboard = scoreboard;
 		this.talker = talker;
 		this.thrower = thrower;
 		this.engine = engine;
 		this.scanner = scanner;
+		this.playerHistory = history;
 		this.totalNumRounds = totalNumRounds;
 	}
 	/**
@@ -53,14 +63,14 @@ public class Game {
 			Exception e = new Exception("scoreboard is not empty");
 			throw e;
 		}
-		int roundNumber = 0;
-		while (roundNumber < totalNumRounds) {
+		int roundNumber = 1;
+		while (roundNumber <= totalNumRounds) {
 			
 			talker.welcomeToRound(roundNumber);
-			
-			Move aiMove = thrower.getMove();
 			Move playerMove = talker.askForMove();
-						
+			playerHistory.updateStats(playerMove);
+			Move aiMove = thrower.getMove(playerHistory);
+			
 			Result result = engine.compareMoves(playerMove,aiMove);
 			
 			roundNumber++;
@@ -102,6 +112,7 @@ public class Game {
 	private Engine engine;
 	private Scanner scanner;
 	private int totalNumRounds;
+	private History playerHistory;
 	
 	
 

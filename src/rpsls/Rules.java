@@ -1,5 +1,6 @@
 package rpsls;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 /**
  * Abstract Object Model of Game Logic.
@@ -21,8 +22,8 @@ public class Rules {
 	public Rules(Action[][] actionTable, Result[][] resultTable) {
 		this.actionTable = actionTable;
 		this.resultTable = resultTable;
-		int dim = actionTable.length;
-		this.potentialActions = Arrays.copyOfRange(Action.values(), 0, dim);
+		this.dim = resultTable.length;
+		this.potentialMoves = Arrays.copyOfRange(Move.values(), 0, dim);
 	}
 	/**
 	 * 
@@ -42,11 +43,27 @@ public class Rules {
 	 * 
 	 * @return a list of actions that the user or AI can legally execute.
 	 */
-	public Action[] getActions() {
-		return potentialActions;
+	public Move[] getMoves() {
+		return potentialMoves;
+	}
+	
+	public Move getRandomCounterMove(Move move) {
+		
+		ArrayList<Move> counterMoves= new ArrayList<Move>();
+		Move[] moves = getMoves();
+		for (int i = 0;i<dim;i++) {
+			Result result = resultTable[move.ordinal()][i];
+			//searching for moves that the AI can use to beat a player move
+			if (result == Result.AIWIN) { 
+				counterMoves.add(moves[i]);
+			}
+		}
+		int rnd = (int)((counterMoves.size()-0.000001)*Math.random());
+		return counterMoves.get(rnd);
 	}
 	
 	private Action[][] actionTable;
 	private Result[][] resultTable;
-	private Action[] potentialActions;
+	private Move[] potentialMoves;
+	private int dim;
 }

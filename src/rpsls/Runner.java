@@ -36,12 +36,12 @@ public class Runner {
 	 * which is reasonable, but would require a lot of new code.
 	 * 	5. A
 	 * 
-	 * 
+	 * Part 2 Comments and Question Answers
 	 * 
 	 */
 	public static void main(String[] args) {
 		
-		int numRounds = 100;
+		int numRounds = 20;
 		//[winner move][looser move]
 		Action[][] stdActionTable = {
 					{ Action.TIES  , null       , Action.CRUSHES },
