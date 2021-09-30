@@ -27,9 +27,9 @@ public class Runner {
 	 * 
 	 * 	1. The instructions were clear, but they could have more aesthetically
 	 * pleasing.
-	 * 	2. The required interaction at each round proceeded smoothly asside from a
+	 * 	2. The required interaction at each round proceeded smoothly aside from a
 	 * bug that had to be corrected. It could have been improved by keeping a
-	 * running tally of the score as the rounds progressed.
+	 * running taly of the score as the rounds progressed.
 	 * 	3. The user did not like the zero indexing of the rounds. They were annoyed
 	 * by the frequency of ties.
 	 * 	4. The user requested for running statistics on the AI and human guesses
@@ -37,11 +37,34 @@ public class Runner {
 	 * 	5. A
 	 * 
 	 * Part 2 Comments and Question Answers
+	 * 	After playing the enhanced AI (described in the SmartThrower class
+	 * that I made I realized that it had its benefits but also its drawbacks. 
+	 * It was very good at playing against players who relied heavily on one or two weapons.
+	 * However, it could not recognize patterns in players who split their time equally
+	 * between the weapons, but had otherwise predictable patters. For example, it was 
+	 * essentially random for the player sequence r,p,s,r,p,s,r,p,s,r,p,s,r,p,s... I would be
+	 * interested to do more detailed statistics to capture these sorts of trends.
+	 * 
+	 * 	1. The instructions were clear and good. It could be improved by adding ascii art?
+	 * 	2. The interaction was smooth. It could have been improved by a running taly.
+	 * 	3. The user did initially try to get the task over with by playing only rock
+	 * but were surprised when the computer started playing only paper! 
+	 * 	4. The user requested the AI prediction on the players next move which seemed unfair.
+	 * 	5. A
+	 * 
+	 * Part 3 Comments and Question
+	 * 	I must admit, I was disappointed at the "smart" strategy to lose 49/51 the user in 
+	 * this test. I guess it only works if a user really does have some 
+	 * statistically significant bias towards one argument on the order of N=100. 
+	 * 
+	 * 	6. The user found the random strategy harder even though they actually performed 
+	 * better against it. This may be because they interpreted it as less predictable. They
+	 * were also sunned by long loosing streaks that occurred by random chance.
 	 * 
 	 */
 	public static void main(String[] args) {
 		
-		int numRounds = 20;
+		int numRounds = 100;
 		//[winner move][looser move]
 		Action[][] stdActionTable = {
 					{ Action.TIES  , null       , Action.CRUSHES },
@@ -53,19 +76,35 @@ public class Runner {
 					{ Result.TIE     , Result.AIWIN   , Result.HUMANWIN },
 					{ Result.HUMANWIN, Result.TIE     , Result.AIWIN    },
 					{ Result.AIWIN   , Result.HUMANWIN, Result.TIE      }};
-		Rules stdRules = new Rules(stdActionTable,stdResultTable);
 		
-		Game rpsGame = Game.newGame(numRounds,stdRules);
+		//[winner move][looser move]
+		Action[][] exdActionTable = {
+				{ Action.TIES  , null       , Action.CRUSHES, Action.CRUSHES    , null             },
+				{ Action.COVERS, Action.TIES, null          , null              , Action.DISPROVES },
+				{ null         , Action.CUTS, Action.TIES   , Action.DECAPITATES, null },
+				{ null         , Action.EATS, null          , Action.TIES       , Action.POISONS },
+				{ Action.VAPORIZES, null    , Action.SMASHES, null              , Action.TIES}};
+	
+		//[player move][AI move]
+		Result[][] exdResultTable = {
+				{ Result.TIE     , Result.AIWIN   , Result.HUMANWIN , Result.HUMANWIN, Result.AIWIN},
+				{ Result.HUMANWIN, Result.TIE     , Result.AIWIN    , Result.AIWIN   , Result.HUMANWIN},
+				{ Result.AIWIN   , Result.HUMANWIN, Result.TIE      , Result.HUMANWIN, Result.AIWIN},
+				{ Result.AIWIN   , Result.HUMANWIN, Result.AIWIN    , Result.TIE, Result.HUMANWIN},
+				{ Result.HUMANWIN, Result.AIWIN   , Result.HUMANWIN , Result.AIWIN, Result.TIE}};
+		//Rules stdRules = new Rules(stdActionTable,stdResultTable);
+		Rules exdRules = new Rules(exdActionTable,exdResultTable);
 		
-		rpsGame.welcomePlayer();
+		Game rpslsGame = Game.newGame(numRounds, exdRules, Strategy.RANDOM);
+		rpslsGame.welcomePlayer();
 		
 		try {
-			rpsGame.play();
+			rpslsGame.play();
 		} catch (Exception e) {//enforces order in which you call game methods
 			e.printStackTrace();
 		}
-		rpsGame.summarize();
-		rpsGame.close();
+		rpslsGame.summarize();
+		rpslsGame.close();
 
 	}
 

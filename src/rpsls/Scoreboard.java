@@ -1,18 +1,17 @@
 package rpsls;
 
+/**
+ * Scoreboard object keeps track of how players perform with which moves.
+ * @author frederickcunningham
+ *
+ */
 public class Scoreboard {
-	private Rules rules;
-	private int aiScore;
-	private int playerScore;
-	private int roundsSoFar;
-	private int numTies;
-	private int[] playerWins;
-	private int[] playerLosses;
-	private int[] playerTies;
-	private int[] aiWins;
-	private int[] aiLosses;
-	private int[] aiTies;
-
+	
+	/**
+	 * Constructor
+	 * Uses the rules of the game to structure the board.
+	 * @param rules
+	 */
 	public Scoreboard(Rules rules) {
 		this.rules = rules;
 		aiScore = 0;
@@ -26,6 +25,12 @@ public class Scoreboard {
 		aiLosses = new int[dim];
 		aiTies = new int[dim];
 	}
+	/**
+	 * Sets the score according to what has happened in the game
+	 * @param playerMove
+	 * @param aiMove
+	 * @param result
+	 */
 	public void update(Move playerMove, Move aiMove, Result result) {
 		
 		if (result == Result.AIWIN) {
@@ -47,14 +52,20 @@ public class Scoreboard {
 		
 	}
 
-
+	/**
+	 * Checks to see if the game has started yet
+	 * @return true if has not.
+	 */
 	public boolean isNotEmpty() {
 		if(roundsSoFar == 0 && numTies == 0)
 			return false;
 		else
 			return true;
 	}
-	
+	/**
+	 * Visual representation of the board
+	 * @return string that holds all data in board.
+	 */
 	@Override
 	public String toString() {
 		StringBuilder builder = new StringBuilder();
@@ -78,5 +89,17 @@ public class Scoreboard {
 		}
 		return builder.toString();
 	}
+	
+	private Rules rules;
+	private int aiScore;
+	private int playerScore;
+	private int roundsSoFar;
+	private int numTies;
+	private int[] playerWins;
+	private int[] playerLosses;
+	private int[] playerTies;
+	private int[] aiWins;
+	private int[] aiLosses;
+	private int[] aiTies;
 
 }

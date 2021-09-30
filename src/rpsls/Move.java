@@ -13,7 +13,10 @@ public enum Move {
 	SPOCK("Spock");
 	
 	public final String label;
-	
+	/**
+	 * Enum Constructor used to attach a string to each constant.
+	 * @param label
+	 */
 	private Move(String label) {
 		this.label = label;
 	}

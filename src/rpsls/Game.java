@@ -18,17 +18,40 @@ public class Game {
 	 * @param rules indicate the type of game being played.
 	 * @return an instance of the Game object.
 	 */
-	public static Game newGame(int numRounds, Rules rules) {
+	public static Game newGame(int numRounds, Rules rules, Strategy strat) {
 		Scanner aInputScanner = new Scanner(System.in);
 		Scoreboard aScoreboard = new Scoreboard(rules);
-		StdTalker aTalker = new StdTalker(aInputScanner);
+		Talker aTalker = getTalker(rules,aInputScanner);
 		Engine aEngine = new Engine(rules);
-		SmartThrower aThrower = new SmartThrower(rules);
+		Thrower aThrower = getThrower(strat,rules);
 		History aHistory = new History(rules);
-		
-		
 		return new Game(aScoreboard, aTalker, aThrower, aEngine, aInputScanner, aHistory,numRounds);
 		
+	}
+	/**
+	 * Private abstract factory for talker.
+	 */
+	private static Talker getTalker(Rules rules, Scanner scanner) {
+		System.out.println(rules.getMoves().length);
+		if (rules.getMoves().length==3) {
+			return new StdTalker(scanner);
+		} else {
+			
+			return new ExtendedTalker(scanner);
+			
+		}
+	}
+	/**
+	 * Private abstract factory for thrower.
+	 */
+	private static Thrower getThrower(Strategy strat, Rules rules) {
+		if(strat == Strategy.ZERO_ORDER_STATS) {
+			return new SmartThrower(rules);
+		} else if (strat == Strategy.RANDOM) {
+			return new StdThrower();
+		} else {//default
+			return new StdThrower();
+		}
 	}
 	private Game(Scoreboard scoreboard, 
 				 Talker talker, 

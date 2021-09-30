@@ -8,17 +8,24 @@ package rpsls;
  */
 public enum Action {
 	CRUSHES("crushes"),
-	SMASHES("cmashes"),
+	SMASHES("smashes"),
 	COVERS("covers"),
 	CUTS("cuts"),
-	POISONS("coisons"),
+	POISONS("poisons"),
 	DISPROVES("disproves"),
 	VAPORIZES("vaporizes"),
 	DECAPITATES("decapitates"),
 	EATS("eats"), 
 	TIES("ties");
 	
+	
 	public final String label;
+	
+	/**
+	 * Enumeration Constructor
+	 * I had to use this in order to have a constant be connected to a number and a string.
+	 * @param label
+	 */
 	private Action(String label) {
 		this.label = label;
 	}

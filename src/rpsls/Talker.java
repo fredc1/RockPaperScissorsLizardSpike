@@ -1,5 +1,10 @@
 package rpsls;
-
+/**
+ * Abstract Talker object handles all I/O with user.
+ * For more granular method javadoc see implementations.
+ * @author frederickcunningham
+ *
+ */
 public abstract class Talker {
 
 	protected abstract void welcomeToGame();

@@ -46,7 +46,13 @@ public class Rules {
 	public Move[] getMoves() {
 		return potentialMoves;
 	}
-	
+	/**
+	 * This function takes in a move and returns a move that will beat the input move
+	 * using the rules of the game. If there are multiple rules that will win,
+	 * it chooses one randomly.
+	 * @param move is the input move to beat.
+	 * @return the move that beats the input move.
+	 */
 	public Move getRandomCounterMove(Move move) {
 		
 		ArrayList<Move> counterMoves= new ArrayList<Move>();
